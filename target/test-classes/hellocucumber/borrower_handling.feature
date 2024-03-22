@@ -1,63 +1,56 @@
 Feature: Borrower handling by the system
-  The librarian can sign up a new person, modify his credentials or delete his account
+  The system can register a new person, modify his/her credentials or delete his/her account
 
-  User Story: As a librarian
-  I want to be able to manage loaning books to people
-  So that borrowers can borrow books
+#  User Story: As a librarian
+#  I want to be able to manage loaning books to people
+#  So that borrowers can borrow books
 
-    Scenario: Signing up a New Borrower
-      Given "Barry Alen" is eligible to borrow books
-      When the librarian assigns a unique borrower ID to him
-      And the librarian enters the borrower's details
-      Then the system stores the borrower's information
+    Scenario: Registering a New Borrower
+    This scenario describes the process of registering a new borrower in the library
+      Given "Barry Alen" wants to register to become a borrower
+      And "Barry Alen" hasn't already registered
+      When "Barry Alen" gets registered in the system with a unique borrowerΝο and his details
+      Then the system stores the borrower's details successfully
 
-    Scenario: Borrower trying to sign up already exists
-      Given "Barry Alen" is already in the system
-      And "Barry Alen" is eligible to borrow books
-      When the librarian tries to enter the borrower's details
-      Then the system informs the librarian that the user already exists
+    Scenario: Borrower trying to register already exists
+    This scenario describes what happens when the system tries to register a new borrower who has already registered before
+      Given "Barry Alen" wants to register to become a borrower
+      And "Barry Alen" has already registered
+      When "Barry Alen" gets registered in the system with a unique borrowerΝο and his details
+      Then the system informs that the user already exists
 
-    Scenario: Librarian wants to cancel the sign up
-      Given "Barry Alen" is eligible to borrow books
-      And the librarian is entering the borrower's details
-      When the librarian chooses to cancel the sign up
-      Then the system does not store the borrower's information
-
-
-    Scenario: Updating Borrower Information when he exists
-      Given "Barry Alen" has already signed up
-      When the librarian modifies his information
+    Scenario: Updating Borrower details when he exists
+    This scenario describes the process of updating the details of a borrower who has already registered before
+      Given "Barry Alen" is a borrower
+      And "Barry Alen" wants to update his borrowing details
+      When the borrower's details are updated
       Then the system saves the changes
 
-    Scenario: Updating Borrower Information when he doesn't exist
-      Given "Barry Alen" has not signed up
-      When the librarian tries to modify his information
+    Scenario: Updating Borrower details when he doesn't exist
+    This scenario describes what happens when the system tries to update the details of a borrower who has not registered before
+      Given "Barry Alen" isn't a borrower
+      And "Barry Alen" wants to update his borrowing details
+      When the borrower's details are updated
       Then the system displays an error message indicating that the borrower does not exist
-
-    Scenario: Canceling Borrower Update
-      Given the librarian is updating "Barry Alen"'s information
-      When the librarian chooses to cancel the update
-      Then the system discards the changes
 
     Scenario: Deleting a Borrower
-      Given "Barry Alen" is in the system
-      And the librarian searches for the borrower
-      When the librarian selects the option to delete the borrower
-      Then the system removes the borrower's information
+    This scenario describes the process of  deleting the account of a borrower who has already registered
+      Given "Barry Alen" is a borrower
+      And "Barry Alen" wants to delete his account
+      When the deletion of "Barry Alen"'s account is attempted
+      Then the system removes the borrower's details
 
     Scenario: Deleting a Borrower that doesn't exist
-      Given "Barry Alen" is not in the system
-      When the librarian searches for him
+    This scenario describes what happens when the system tries to delete the account of a borrower who has not registered before
+      Given "Barry Alen" isn't a borrower
+      And "Barry Alen" wants to delete his account
+      When the deletion of "Barry Alen"'s account is attempted
       Then the system displays an error message indicating that the borrower does not exist
 
-    Scenario: Librarian wants to cancel the deletion
-      Given the librarian is deleting "Barry Alen"'s account
-      When the librarian chooses to cancel the deletion
-      Then the system discards the deletion
-
-    Scenario: Handling Unreturned Books
-      Given "Barry Alen" is in the system
-      And "Barry Alen" has borrowed books that are not returned
-      When the librarian attempts to delete the borrower
-      Then the system displays the non-returned copies
-      And the librarian chooses to cancel the deletion process
+    Scenario: Handling Unreturned copies of Books
+    This scenario describes what happens when the system tries to delete the account of a borrower who has pending items to return
+      Given "Barry Alen" is a borrower
+      And "Barry Alen" has pending items
+      When the deletion of "Barry Alen"'s account is attempted
+      Then the system doesn't remove the borrower's details
+      And the system informs about the non returned items

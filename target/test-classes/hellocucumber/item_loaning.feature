@@ -7,7 +7,7 @@ Feature: Loaning items
   So that I can study them at home
 
   Scenario: Successful Loaning of an item
-  This scenario describes the successful process of loaning an item of a book to a borrower that is entitled to borrow
+    This scenario describes the successful process of loaning an item of a book to a borrower that is entitled to borrow
     Given the library has the item "Harry Potter"
     And "John Terry" is a borrower
     And "John Terry" has less pending items to return than the maximum lending limit he was assigned
