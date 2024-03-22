@@ -1,6 +1,6 @@
 Feature: Returning a borrowed item to the library
 
-  The borrower returns the book copy in the library and then the system needσ to accept it based on some conditions
+  The borrower returns the book copy in the library and then the system needs to accept it based on some conditions
   User Story:As a librarian
   I want to be able to handle a return of a book copy
   so that another person can borrow it

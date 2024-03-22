@@ -47,7 +47,7 @@ Feature: Borrower handling by the system
     When the deletion of "Barry Alen"'s account is attempted
     Then the system displays an error message indicating that the borrower does not exist
 
-  Scenario: Handling Unreturned copies of Books
+  Scenario: Handling Unreturned items of Books
   This scenario describes what happens when the system tries to delete the account of a borrower who has pending items to return
     Given "Barry Alen" is a borrower
     And "Barry Alen" has pending items
