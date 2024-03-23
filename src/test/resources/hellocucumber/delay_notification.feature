@@ -12,20 +12,20 @@ Feature: Delayed Return Notification
     And "Harry Potter"'s return date has passed
     And "John Terry" had borrowed the item
     When the system searches for "Harry Potter"
-    And the system identifies the borrower who has borrowed the item
-    Then the system sends an email to the borrower with the delayed item and the number of delay days
+    And the system identifies that "John Terry" has borrowed the item
+    Then the system sends an email to "John Terry" with the delayed item and the number of delay days
 
   Scenario: Borrower does not have an email address
   This scenario handles the case where an item hasn't been returned and the system must notify the user via email but he doesn't have one
     Given the system calendar
     And the university's email server
     And the trigger is every Monday at 7:00 a.m.
-    And "Harry Potter"'s deadline date has passed
+    And "Harry Potter"'s return date has passed
     And "John Terry" had borrowed the item
-    And the borrower does not have an email address
+    And "John Terry" does not have an email address
     When the system searches for "Harry Potter"
-    And the system identifies the borrower who has borrowed the item
-    Then the system ignores the borrower
+    And the system identifies that "John Terry" has borrowed the item
+    Then the system ignores the borrower and "John Terry" isn't notified
 
   Scenario: The Email Server is not working
   This scenario handles the case where the email server is not working so we cant send any notifications and cancel the procedure

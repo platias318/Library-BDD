@@ -8,16 +8,16 @@ Feature: Returning a borrowed item to the library
   Scenario:Successful return of an item
   This scenario describes what happens when a borrower returns a loaned item of a book successfully
     Given "Steven Gerrard" has borrowed the item "Animal Kingdom"
-    When "Steven Gerrard" returns the item to the library
+    When the return of "Animal Kingdom" by "Steven Gerrard" is processed
     Then the system should mark the itemState of the item as "AVAILABLE"
-    And "Steven Gerrard"'s pending items should decrease by 1
-    And the items count of the book should increase by 1
+    And "Steven Gerrard" has one less pending item
+    And the items count of the book should increase by one
 
   Scenario:Late return of an item from a borrower
   This scenario describes what happens when a borrower returns a loan of an item late and has to pay fine
     Given "Steven Gerrard" has borrowed the item "Animal Kingdom"
     And "Steven Gerrard" belongs in a borrower category
     And the due date for returning the item has passed
-    When "Steven Gerrard" returns the item to the library
-    Then the system should mark the itemState as "AVAILABLE"
-    And the user should pay the daily fine based on the borrower category he belongs
+    When the return of "Animal Kingdom" by "Steven Gerrard" is processed
+    Then the system should mark the itemState of "Animal Kingdom" as "AVAILABLE"
+    And "Steven Gerrard" incurs a fine based on the borrower category
