@@ -1,56 +1,50 @@
 Feature: Borrower handling by the system
-  The system can register new people, modify their credentials or delete their account
+  The system can register a new person, modify their credentials or delete their account
 
   User Story: As a librarian
-  I want to be able to manage loaning books to people
+  I want to be able to manage loaning books to a person
   So that borrowers can borrow books
 
-  Scenario: Registering a New Borrower
-  This scenario describes the process of registering a new borrower in the library
-    Given "Barry Alen" wants to register to become a borrower
-    And "Barry Alen" hasn't already registered
+  Scenario: Registering a new borrower
+  This scenario describes the process of registering a new borrower in the library system
+    Given "Barry Alen" is not registered as a borrower
     When "Barry Alen" gets registered in the system with a unique borrowerΝο and his details
-    Then the system stores the borrower's details successfully
+    Then the system successfully stores the borrower's details
 
-  Scenario: Borrower trying to register already exists
-  This scenario describes what happens the system tries to register a new borrower who has already registered before
-    Given "Barry Alen" wants to register to become a borrower
-    And "Barry Alen" has already registered
-    When "Barry Alen" gets registered in the system with a unique borrowerΝο and his details
+  Scenario: Borrower trying to register has registered before
+  This scenario describes what happens when the system tries to register a new borrower who has already registered before
+    Given "Barry Alen" is already registered as a borrower
+    When the system attempts to register "Barry Alen" with a unique borrowerΝο and his details
     Then the system informs that the user already exists
 
-  Scenario: Updating Borrower details when he exists
+  Scenario: Updating the borrower's details when he is registered
   This scenario describes the process of updating the details of a borrower who has already registered before
-    Given "Barry Alen" is a borrower
-    And "Barry Alen" wants to update his borrowing details
-    When the borrower's details are updated
+    Given "Barry Alen" is a registered borrower
+    When "Barry Alen" updates his borrowing details
     Then the system saves the changes
 
-  Scenario: Updating Borrower details when he doesn't exist
+  Scenario: Updating the borrower's details when he hasn't registered
   This scenario describes what happens when the system tries to update the details of a borrower who has not registered before
-    Given "Barry Alen" isn't a borrower
-    And "Barry Alen" wants to update his borrowing details
-    When the borrower's details are updated
-    Then the system displays an error message indicating that the borrower does not exist
+    Given "Barry Alen" is not a registered borrower
+    When "Barry Alen" tries to update his borrowing details
+    Then the system displays an error message indicating that "Barry Alen" does not exist
 
-  Scenario: Deleting a Borrower
-  This scenario describes the process of  deleting the account of a borrower who has already registered
-    Given "Barry Alen" is a borrower
-    And "Barry Alen" wants to delete his account
-    When the deletion of "Barry Alen"'s account is attempted
-    Then the system removes the borrower's details
+  Scenario: Deleting a borrower
+  This scenario describes the process of deleting the account of a borrower who has already registered
+    Given "Barry Alen" is a registered borrower
+    When the system deletes "Barry Alen"'s account
+    Then the system removes "Barry Alen"'s details
 
-  Scenario: Deleting a Borrower that doesn't exist
+  Scenario: Deleting a borrower when he hasn't registered
   This scenario describes what happens when the system tries to delete the account of a borrower who has not registered before
-    Given "Barry Alen" isn't a borrower
-    And "Barry Alen" wants to delete his account
-    When the deletion of "Barry Alen"'s account is attempted
-    Then the system displays an error message indicating that the borrower does not exist
+    Given "Barry Alen" is not a registered borrower
+    When the system attempts to delete "Barry Alen"'s account
+    Then the system displays an error message indicating that "Barry Alen" does not exist
 
-  Scenario: Handling Unreturned items of Books
+  Scenario: Handling unreturned items of books
   This scenario describes what happens when the system tries to delete the account of a borrower who has pending items to return
-    Given "Barry Alen" is a borrower
+    Given "Barry Alen" is a registered borrower
     And "Barry Alen" has pending items
-    When the deletion of "Barry Alen"'s account is attempted
-    Then the system doesn't remove the borrower's details
-    And the system informs about the non returned items
+    When the system attempts to delete "Barry Alen"'s account
+    Then the system does not remove "Barry Alen"'s details
+    And the system informs about the pending items

@@ -17,8 +17,14 @@ public interface BorrowerDAO {
      * @return Το δανειζόμενο ή {@code null} εάν αυτός δεν βρεθεί.
      */
     Borrower find(int borrowerNo);
-    
-    
+    /**
+     * Η αναζήτηση ενός δανειζομένου με βάση το όνομα και το επίθετό του.
+     * @param firstname το μικρό όνομα του δανειζόμενου
+     * @param lastname το επίθετο του δανειζόμενου
+     * @return Το δανειζόμενο ή {@code null} εάν αυτός δεν βρεθεί.
+     */
+    Borrower find(String firstname, String lastname);
+
     /**
      * Αποθηκεύει ένα αντικείμενο στην εξωτερική πηγή
      * δεδομένων. Το αντικείμενο μπορεί να είναι κάποιο

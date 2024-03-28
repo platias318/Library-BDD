@@ -1,5 +1,6 @@
 package hellocucumber.memorydao;
 
+import hellocucumber.contacts.TelephoneNumber;
 import hellocucumber.dao.BorrowerDAO;
 import hellocucumber.domain.Borrower;
 
@@ -30,6 +31,15 @@ public class BorrowerDAOMemory implements BorrowerDAO {
     public Borrower find(int borrowerNo) {
         for(Borrower borrower : entities) {
             if (borrower.getBorrowerNo() == borrowerNo ) {
+                return borrower;
+            }
+        }
+        return null;
+    }
+
+    public Borrower find(String firstname, String lastname){
+        for(Borrower borrower : entities) {
+            if (borrower.getFirstName()==firstname && borrower.getLastName()==lastname){
                 return borrower;
             }
         }
