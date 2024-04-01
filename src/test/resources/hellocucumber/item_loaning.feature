@@ -25,7 +25,7 @@ Feature: Loaning items
     And George Red has been assigned a maximum lending limit of 3
     When George Red tries to borrow both items
     Then the system successfully loans the item "Harry Potter" to George Red with a return date set
-    And the system does not loan "Moby Dick" to "George Red" due to the lending limit reached
+    And the system does not loan "Moby Dick" to George Red due to the lending limit reached
     And George Red's pending items increase to 3
 
   Scenario:Item not found
