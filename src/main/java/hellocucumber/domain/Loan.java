@@ -26,7 +26,7 @@ public class Loan {
      * Μόνο αντικείμενα εντός του πακέτου μπορούν
      * να δημιουργήσουν αντικείμενα της κλάσης.
      */
-    Loan() { }
+    public Loan() { }
 
     /**
      * Βοηθητικός κατασκευαστής που αρχικοποιεί έναν δανεισμό.
@@ -34,7 +34,7 @@ public class Loan {
      * @param item Αντίτυπο
      * @param loanDate Ημερομηνία δανεισμού
      */
-    Loan(Borrower borrower, Item item, LocalDate loanDate) {
+    public Loan(Borrower borrower, Item item, LocalDate loanDate) {
         this.borrower = borrower;
         this.item = item;
         this.loanDate = loanDate;
@@ -45,7 +45,7 @@ public class Loan {
      * Θέτει την ημερομηνία δανεισμού.
      * @param loanDate Η ημερομηνία δανεισμού.
      */
-     protected void setLoanDate(LocalDate loanDate) {
+     public void setLoanDate(LocalDate loanDate) {
         this.loanDate = loanDate;
     }
 
@@ -79,7 +79,7 @@ public class Loan {
      * Θέτει την ημερομηνία επιστροφής του αντιτύπου.
      * @param returnDate Η ημερομηνία επιστοφής.
      */
-    protected void setReturnDate(LocalDate returnDate) {
+    public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
     }
 
@@ -98,7 +98,7 @@ public class Loan {
      * @param borrower Ο δανειζόμενος του δανεισμού
      * @see Borrower#getLoans()
      */
-    protected void setBorrower(Borrower borrower) {
+    public void setBorrower(Borrower borrower) {
         if (this.borrower != null) {
             this.borrower.friendLoans().remove(this);
         }
@@ -122,7 +122,7 @@ public class Loan {
      * Θέτει το αντίτυπο του δανεισμού.
      * @param item Το αντίτυπο
      */
-    protected void setItem(Item item) {
+    public void setItem(Item item) {
         this.item = item;
     }
 

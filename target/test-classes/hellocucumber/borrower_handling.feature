@@ -13,7 +13,7 @@ Feature: Borrower handling by the system
 
   Scenario: Borrower trying to register has registered before
   This scenario describes what happens when the system tries to register a new borrower who has already registered before
-    Given George Red is already registered as a borrower
+    Given George Red is registered as a borrower
     When the system attempts to register George Red with a unique borrower number and his details
     Then the system informs that the user already exists
 

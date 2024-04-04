@@ -7,26 +7,29 @@ Feature: Returning a borrowed item to the library
 
   Scenario:Successful return of an item
   This scenario describes the successful process of returning an item by a borrower
-    Given George Red has borrowed the item "Animal Kingdom" with a return date of 2024-03-15
+    Given George Red has borrowed the item Animal Kingdom with a due date of 2024-03-15
     And today's date is 2024-03-12
-    When the return of "Animal Kingdom" is processed
-    Then the system marks the state of "Animal Kingdom" as "AVAILABLE"
+    When the return of Animal Kingdom is processed
+    Then the system marks the state of Animal Kingdom as "AVAILABLE"
     And George Red has one less pending item
     And the items count of the book increases by one
+    And the return date of the item is set to 2024-03-12
 
   Scenario:Late return of an item from a borrower
   This scenario describes what happens when a borrower returns a loaned item late and has to pay a fine
-    Given George Red has borrowed the item "Animal Kingdom" with a return date of 2024-03-15
+    Given George Red has borrowed the item Animal Kingdom with a due date of 2024-03-15
     And today's date is 2024-03-20
-    When the return of "Animal Kingdom" is processed
-    Then the system marks the state of "Animal Kingdom" as "AVAILABLE"
+    When the return of Animal Kingdom is processed
+    Then the system marks the state of Animal Kingdom as "AVAILABLE"
     And George Red pays a fine based on the borrower category
+    And the return date of the item is set to 2024-03-12
 
   Scenario:Borrower unable to pay fine
   This scenario describes what happens when a borrower returns a loan of an item late and doesn't have enough money to pay for the fine
-    Given George Red has borrowed the item "Animal Kingdom" with a return date of 2024-03-15
+    Given George Red has borrowed the item Animal Kingdom with a due date of 2024-03-15
     And today's date is 2024-03-20
     And George Red doesn't have enough money to pay the fine
-    When the return of "Animal Kingdom" is processed
+    When the return of Animal Kingdom is processed
     Then the system does not accept the return
     And George Red has the same number of pending items
+    And the return date of the item is not created
