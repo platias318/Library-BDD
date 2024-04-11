@@ -229,7 +229,6 @@ public class Loan {
         if (getDue() == null) {
             return 0;
         }
-
         long overdue = ChronoUnit.DAYS.between(getDue(),getReturnDate());
         return overdue > 0 ? overdue : 0 ;
     }
@@ -250,7 +249,6 @@ public class Loan {
         if (overdue <= 0) {
             return Money.euros(0);
         }
-        
         return getBorrower().getDailyFine().times(overdue);
     }
 

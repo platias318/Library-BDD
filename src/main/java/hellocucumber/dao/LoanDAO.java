@@ -20,6 +20,7 @@ public interface LoanDAO {
      * @return Ο δανεισμός που είναι σε εκκρεμότητα.
      */
     Loan findPending(int itemNo);
+    Loan findLoan(int itemNo);
 
     /**
      * Επιστρέφει όλους τους εκκρεμείς δανεισμούς.

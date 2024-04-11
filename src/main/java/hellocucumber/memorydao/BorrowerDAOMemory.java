@@ -6,6 +6,7 @@ import hellocucumber.domain.Borrower;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class BorrowerDAOMemory implements BorrowerDAO {
 
@@ -26,7 +27,6 @@ public class BorrowerDAOMemory implements BorrowerDAO {
             entities.add(entity);    
         }        
     }
-
     
     public Borrower find(int borrowerNo) {
         for(Borrower borrower : entities) {
@@ -39,7 +39,7 @@ public class BorrowerDAOMemory implements BorrowerDAO {
 
     public Borrower find(String firstname, String lastname){
         for(Borrower borrower : entities) {
-            if (borrower.getFirstName()==firstname && borrower.getLastName()==lastname){
+            if (Objects.equals(borrower.getFirstName(), firstname) && Objects.equals(borrower.getLastName(), lastname)){
                 return borrower;
             }
         }

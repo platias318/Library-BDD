@@ -1,4 +1,4 @@
-package hellocucumber;
+package hellocucumber.StepDefinitions;
 
 import hellocucumber.domain.Book;
 import hellocucumber.domain.Borrower;
@@ -18,14 +18,18 @@ public class CustomParamTypes {
         borrower.setLastName(names[1]);
         return borrower;
     }
-    @ParameterType("\\d{4}-\\d{2}-\\d{2}") //custom parameter type for creating a date
-    public SimpleCalendar simpleCalendar(String date){
+    @ParameterType("\\d{4}-\\d{2}-\\d{2}")
+    public SimpleCalendar simpleCalendar(String date) {
         Pattern pattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})");
         Matcher matcher = pattern.matcher(date);
-        int year = Integer.parseInt(matcher.group(1));
-        int month = Integer.parseInt(matcher.group(2));
-        int day = Integer.parseInt(matcher.group(3));
+        if (matcher.find()) { // Check if a match is found
+            int year = Integer.parseInt(matcher.group(1));
+            int month = Integer.parseInt(matcher.group(2));
+            int day = Integer.parseInt(matcher.group(3));
 
-        return new SimpleCalendar(year,month,day);
+            return new SimpleCalendar(year, month, day);
+        } else {
+            throw new IllegalArgumentException("Invalid date format: " + date);
+        }
     }
 }

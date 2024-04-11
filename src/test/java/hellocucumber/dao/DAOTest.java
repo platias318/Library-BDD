@@ -66,6 +66,23 @@ public class DAOTest {
         Borrower borrower = borrowerDao.find(4711);
         Assertions.assertNull(borrower);    
     }
+
+    /**
+     * Αναζήτηση δανειζομένου που υπάρχει στη βάση δεδομένων με το όνομα και το επίθετό του
+     */
+    @Test
+    public void findExistingBorrowerBasedOnNameAndSurname(){
+        Borrower borrower = borrowerDao.find("Νίκος","Διαμαντίδης");
+        Assertions.assertEquals("Νίκος", borrower.getFirstName());
+    }
+    /**
+     * Αναζήτηση δανειζομένου που δεν υπάρχει στη βάση δεδομένων με το όνομα και το επίθετό του
+     */
+    @Test
+    public void findNonExistingBorrowerBasedOnNameAndSurname(){
+        Borrower borrower = borrowerDao.find("Δημήτρης","Παπαγιάννης");
+        Assertions.assertNull(borrower);
+    }
         
     /**
      * Εύρεση καταλόγου δανειζομένων
@@ -183,6 +200,12 @@ public class DAOTest {
         Loan loan = CreateNewLoan();
         loanDao.save(loan);
         Assertions.assertNotNull(loanDao.findPending(ITEM_NO_FOR_NEW_LOAN));        
+    }
+    @Test
+    public void findExistingLoan(){
+        Loan loan = CreateNewLoan();
+        loanDao.save(loan);
+        Assertions.assertNotNull(loanDao.findLoan(ITEM_NO_FOR_NEW_LOAN));
     }
     
     /**

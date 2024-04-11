@@ -269,6 +269,7 @@ public class Borrower  {
      */
     public Money getDailyFine() {
         if (getCategory() == null) {
+            System.out.println("if category is null");
             return null;
         }
         return getCategory().getDailyFine();

@@ -25,6 +25,14 @@ public class LoanDAOMemory implements LoanDAO{
     public List<Loan> findAll() {
         return new ArrayList<Loan>(entities);
     }
+    public Loan findLoan(int itemNo){
+        for(Loan loan:entities){
+            if(loan.getItem().getItemNumber()==itemNo){
+                return loan;
+            }
+        }
+        return null;
+    }
 
 
     public void save(Loan entity) {

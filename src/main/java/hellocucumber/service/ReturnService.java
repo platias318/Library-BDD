@@ -26,6 +26,7 @@ public class ReturnService {
 
         Loan loan = loanDAO.findPending(itemNo);
         if (loan == null) {
+            System.out.println("the loan is null");
             throw new LibraryException();
         }
 
