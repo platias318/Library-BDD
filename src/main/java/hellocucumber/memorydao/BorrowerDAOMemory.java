@@ -13,8 +13,8 @@ public class BorrowerDAOMemory implements BorrowerDAO {
 
     protected static List<Borrower> entities = new ArrayList<Borrower>();
     
-    public void delete(Borrower entity) {
-        entities.remove(entity);    
+    public boolean delete(Borrower entity) {
+        return entities.remove(entity);
     }
 
     public List<Borrower> findAll() {
@@ -22,10 +22,12 @@ public class BorrowerDAOMemory implements BorrowerDAO {
     }
 
 
-    public void save(Borrower entity) {
+    public boolean save(Borrower entity) {
         if (! entities.contains(entity)) {
-            entities.add(entity);    
-        }        
+            entities.add(entity);
+            return true;
+        }
+        return false;
     }
     
     public Borrower find(int borrowerNo) {

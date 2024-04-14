@@ -34,13 +34,13 @@ public interface BorrowerDAO {
      * @param entity Το αντικείμενο του οποίου η κατάσταση
      * αποθηκεύεται στην εξωτερική πηγή δεδομένων.
      */
-    void save(Borrower entity);
+    boolean save(Borrower entity);
     
     /**
      * Διαγράφει το αντικείμενο από την εξωτερική πηγή δεδομένων.
      * @param entity Το αντικείμενο προς διαγραφή.
      */
-    void delete(Borrower entity);
+    boolean delete(Borrower entity);
     
     /**
      * Επιστρέφει όλα τα αντικείμενα  από την εξωτερική πηγή δεδομένων.

@@ -113,7 +113,7 @@ public class DAOTest {
     public void deleteBorrower() {
         List<Borrower> allBorrowers = borrowerDao.findAll();
         Borrower borrower = allBorrowers.get(0);
-        borrowerDao.delete(borrower );
+        borrowerDao.delete(borrower);
         allBorrowers = borrowerDao.findAll();
         Assertions.assertEquals(INITIAL_BORROWER_COUNT - 1, allBorrowers.size());
         Assertions.assertNull(borrowerDao.find(borrower.getBorrowerNo()));

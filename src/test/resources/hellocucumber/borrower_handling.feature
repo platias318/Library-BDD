@@ -39,7 +39,7 @@ Feature: Borrower handling by the system
   This scenario describes what happens when the system tries to delete the account of a borrower who has not registered before
     Given George Red is not registered as a borrower
     When the system attempts to delete George Red's account
-    Then the system displays an error message indicating that George Red does not exist
+    Then the system informs that the borrower does not exist
 
   Scenario: Handling unreturned items of books
   This scenario describes what happens when the system tries to delete the account of a borrower who has pending items to return
