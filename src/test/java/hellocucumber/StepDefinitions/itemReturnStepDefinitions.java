@@ -67,8 +67,7 @@ public class itemReturnStepDefinitions {
     public void givenBorrowerBorrowedItemWithReturnDate(Borrower borrower,Integer daysBefore) {
         //creating,saving the borrower and setting up the borrower category
         george_red = borrower;
-        BorrowerCategory category = new BorrowerCategory();
-        george_red.setCategory(category);
+        george_red.setCategory(new BorrowerCategory());
         george_red.getCategory().setMaxLendingItems(5);
         george_red.getCategory().setDailyFine(new Money(new BigDecimal(Integer.toString(5)),Currency.getInstance("EUR")));
         borrowerDao.save(george_red);
