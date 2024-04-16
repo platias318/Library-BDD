@@ -54,11 +54,11 @@ public class NotificationService {
     }
 
 
-    private void sendEmail(Borrower borrower,
+    private boolean sendEmail(Borrower borrower,
             String subject, String message) {
         EmailAddress eMail = borrower.getEmail();
         if (eMail == null || !eMail.isValid()) {
-            return;
+            return false;
         }
         
         EmailMessage emailMessage = new EmailMessage();
@@ -66,6 +66,7 @@ public class NotificationService {
         emailMessage.setSubject(subject);
         emailMessage.setBody(message);
         provider.sendEmail(emailMessage);
+        return true;
     }
     
     private String composeMessage(Book book, long overdue) {

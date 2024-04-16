@@ -11,9 +11,6 @@ import hellocucumber.memorydao.LoanDAOMemory;
 import hellocucumber.memorydao.MemoryInitializer;
 import org.junit.*;
 
-import com.mgiandia.library.dao.*;
-
-
 public class LoanServiceTest {
 
     

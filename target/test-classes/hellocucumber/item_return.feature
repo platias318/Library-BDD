@@ -23,13 +23,3 @@ Feature: Returning a borrowed item to the library
     Then the system marks the state of Animal Kingdom as AVAILABLE
     And George Red pays a fine based on the borrower category
     And the return date of the loan is set to today's date
-
-#    Scenario:Borrower unable to pay fine ( EINAI EKTOS SISTIMATOS AFOU O XRISTIS DEN EXEI PEDIO ME LEFTA)
-#    This scenario describes what happens when a borrower returns a loan of an item late and doesn't have enough money to pay for the fine
-#      Given George Red borrowed the item Animal Kingdom 10 days prior to today's date
-#      And George Red has been assigned maximum lending days of 7
-#      And George Red doesn't have enough money to pay the fine
-#      When the return of Animal Kingdom is processed
-#      Then the system does not accept the return of the item
-#      And George Red has the same number of pending items
-#      And the return date of the loan is not created

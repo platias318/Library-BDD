@@ -9,6 +9,8 @@ import hellocucumber.domain.Borrower;
 import hellocucumber.domain.BorrowerCategory;
 import hellocucumber.domain.Loan;
 import hellocucumber.memorydao.BorrowerDAOMemory;
+import hellocucumber.service.EmailProvider;
+import hellocucumber.service.EmailProviderStub;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;

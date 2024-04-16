@@ -1,6 +1,7 @@
 package hellocucumber.StepDefinitions;
 
 import hellocucumber.contacts.EmailAddress;
+import hellocucumber.contacts.EmailMessage;
 import hellocucumber.dao.BorrowerDAO;
 import hellocucumber.dao.ItemDAO;
 import hellocucumber.dao.LoanDAO;
@@ -8,6 +9,8 @@ import hellocucumber.domain.*;
 import hellocucumber.memorydao.BorrowerDAOMemory;
 import hellocucumber.memorydao.ItemDAOMemory;
 import hellocucumber.memorydao.LoanDAOMemory;
+import hellocucumber.service.EmailProvider;
+import hellocucumber.service.EmailProviderStub;
 import hellocucumber.service.LoanService;
 import hellocucumber.service.NotificationService;
 import io.cucumber.java.Before;
@@ -22,6 +25,7 @@ import java.util.List;
 
 public class delayNotificationStepDefinitions {
     // Instance variables
+    private EmailProviderStub emailProvider;
     private NotificationService notificationService;
     private LoanService loanService; //An instance of the loanService class to help with the loaning of the copies
     private Borrower george_red; //The borrower persona that will be used for the whole feature
@@ -38,6 +42,7 @@ public class delayNotificationStepDefinitions {
         borrowerDao = new BorrowerDAOMemory();
         loanService = new LoanService();
         notificationService= new NotificationService();
+        emailProvider= new EmailProviderStub();
         clearData();
     }
     public void clearData(){
@@ -94,10 +99,18 @@ public class delayNotificationStepDefinitions {
     }
     @When("the system executes the delayed return notification process")
     public void theSystemExecutesTheDelayedReturnNotificationProcess() {
-
+        notificationService.setProvider(emailProvider);
+        notificationService.notifyBorrowers();
     }
     @Then("George Red receives an email notification for the return of the item")
     public void georgeRedReceivesAnEmailNotificationForTheReturnOfTheItem() {
+        boolean answer = false;
+        for(EmailMessage message:emailProvider.getAllEmails()){
+            if(message.getTo().equals(george_red.getEmail())){
+                answer= true;
+            }
+        }
+        Assertions.assertTrue(answer);
     }
 
     @Given("George Red does not have an email address")
@@ -109,5 +122,12 @@ public class delayNotificationStepDefinitions {
     }
     @Then("George Red does not receive an email notification for the return of the item")
     public void georgeRedDoesNotReceiveAnEmailNotificationForTheReturnOfTheItem() {
+        boolean answer= true;
+        for(EmailMessage message:emailProvider.getAllEmails()){
+            if(message.getTo().equals(george_red.getEmail())){
+                answer= true;
+            }
+        }
+        Assertions.assertTrue(answer);
     }
 }
