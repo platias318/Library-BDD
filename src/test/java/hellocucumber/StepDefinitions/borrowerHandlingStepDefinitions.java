@@ -133,7 +133,7 @@ public class borrowerHandlingStepDefinitions {
     }
     @When("the system attempts to delete George Red's account")
     public void whenSystemAttemptsDeleteAccount() {
-        //Attempting to delete the borrower if if there aren't any pending items, and capturing the response of the operation in the variable answer
+        //Attempting to delete the borrower if there aren't any pending items, and capturing the response of the operation in the variable answer
         if(george_red.countPendingItems()==0) {
             answer = borrowerDao.delete(george_red);
         }

@@ -17,6 +17,7 @@ import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import org.junit.jupiter.api.Assertions;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class delayNotificationStepDefinitions {
@@ -56,9 +57,17 @@ public class delayNotificationStepDefinitions {
             borrowerDao.delete(borrower);
         }
     }
-    @Given("Harry Potter's due date has passed")
-    public void givenItemDueDatePassed() {
-        // Create and save the item/book Harry Potter
+    //Creating the borrower and the item/book that will be used in the scenario
+    @Given("{borrower} has borrowed the item Harry Potter")
+    public void givenBorrowerHasBorrowedTheItem(Borrower borrower) {
+        //Save the borrower
+        george_red = borrower;
+        george_red.setCategory(new BorrowerCategory());
+        george_red.getCategory().setMaxLendingDays(2);//setting a dummy number for the scenario to pass
+        george_red.getCategory().setMaxLendingItems(10);
+        borrowerDao.save(george_red);
+
+        //Create and save the item/book Harry Potter
         hPotter_book = new Book();
         hPotter_book.setTitle("Harry Potter");
         hPotter_item = new Item();
@@ -67,18 +76,16 @@ public class delayNotificationStepDefinitions {
         hPotter_item.available();
         hPotter_item.setItemNumber(1001112);
         itemDao.save(hPotter_item);
-
+    }
+    @Given("Harry Potter's due date has passed")
+    public void givenItemDueDatePassed() {
         //make the due date of the item passed
+        if(loanService.findBorrower(george_red.getBorrowerNo())){
+            loanService.borrow(hPotter_item.getItemNumber());
+            loanDao.findPending(hPotter_item.getItemNumber()).setLoanDate(LocalDate.now().minusDays(10));
+        }
     }
-    //Creating the borrower that will be used in the scenario
-    @Given("{borrower} had borrowed the item")
-    public void givenBorrowerHasBorrowedTheItem(Borrower borrower) {
-        //Save the borrower
-        george_red = borrower;
-        george_red.setCategory(new BorrowerCategory());
-        george_red.getCategory().setMaxLendingDays(2);//setting a dummy number for the scenario to pass
-        borrowerDao.save(george_red);
-    }
+
 
     @Given("George Red has an email address")
     public void georgeRedHasAnEmailAddress() {
