@@ -9,6 +9,7 @@ import hellocucumber.memorydao.ItemDAOMemory;
 import hellocucumber.memorydao.LoanDAOMemory;
 import hellocucumber.service.LoanService;
 import hellocucumber.service.ReturnService;
+import hellocucumber.support.LibraryWorld;
 import hellocucumber.util.Money;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
@@ -27,32 +28,31 @@ public class itemReturnStepDefinitions {
     private LoanService loanService;
     private ReturnService returnService;
     private Borrower georgeRed;
-    private LoanDAO loanDao;
-    private ItemDAO itemDao;
-    private BorrowerDAO borrowerDao;
     private Item kingdomItem;
-
+    private final LibraryWorld world;
+    public itemReturnStepDefinitions(LibraryWorld world){
+        this.world=world;
+    }
     @Before
     public void setUp(){
-        itemDao = new ItemDAOMemory();
-        loanDao = new LoanDAOMemory();
-        borrowerDao= new BorrowerDAOMemory();
         loanService = new LoanService();
         returnService = new ReturnService();
-        clearData();
+        world.clearBorrowers();
+        world.clearItems();
+        world.clearLoans();
     }
     public void clearData() {
-        List<Item> allItems = itemDao.findAll();
+        List<Item> allItems = world.itemDao.findAll();
         for (Item item : allItems) {
-            itemDao.delete(item);
+            world.itemDao.delete(item);
         }
-        List<Loan> allLoans = loanDao.findAll();
+        List<Loan> allLoans = world.loanDao.findAll();
         for (Loan loan : allLoans) {
-            loanDao.delete(loan);
+            world.loanDao.delete(loan);
         }
-        List<Borrower> allBorrowers = borrowerDao.findAll();
+        List<Borrower> allBorrowers = world.borrowerDao.findAll();
         for(Borrower borrower : allBorrowers) {
-            borrowerDao.delete(borrower);
+            world.borrowerDao.delete(borrower);
         }
     }
     @Given("{borrower} borrowed the item Animal Kingdom {int} days prior to today's date")
@@ -61,7 +61,7 @@ public class itemReturnStepDefinitions {
         georgeRed.setCategory(new BorrowerCategory());
         georgeRed.getCategory().setMaxLendingItems(5);
         georgeRed.getCategory().setDailyFine(new Money(new BigDecimal(Integer.toString(5)),Currency.getInstance("EUR")));
-        borrowerDao.save(georgeRed);
+        world.borrowerDao.save(georgeRed);
 
         // Create and save the item/book Animal Kingdom
         Book kingdomBook = new Book();
@@ -71,11 +71,11 @@ public class itemReturnStepDefinitions {
         kingdomBook.addItem(kingdomItem);
         kingdomItem.available();
         kingdomItem.setItemNumber(1001114);
-        itemDao.save(kingdomItem);
+        world.itemDao.save(kingdomItem);
         if(loanService.findBorrower(georgeRed.getBorrowerNo())){
             LocalDate date = loanService.borrow(kingdomItem.getItemNumber());
             //changing to a custom loan date than the one created, for the scenario to be right
-            loanDao.findPending(kingdomItem.getItemNumber()).setLoanDate(LocalDate.now().minusDays(daysBefore));
+            world.loanDao.findPending(kingdomItem.getItemNumber()).setLoanDate(LocalDate.now().minusDays(daysBefore));
         }
 
     }
@@ -102,7 +102,7 @@ public class itemReturnStepDefinitions {
     }
     @Then("the return date of the loan is set to today's date")
     public void thenNewReturnDateSet() {
-        Assertions.assertEquals(LocalDate.now(),loanDao.findLoan(kingdomItem.getItemNumber()).getReturnDate());
+        Assertions.assertEquals(LocalDate.now(),world.loanDao.findLoan(kingdomItem.getItemNumber()).getReturnDate());
     }
     @Then("George Red pays a fine based on the borrower category")
     public void thenFinePaymentIsDone() {

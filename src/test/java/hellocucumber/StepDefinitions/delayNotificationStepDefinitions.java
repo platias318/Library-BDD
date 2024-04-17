@@ -12,6 +12,7 @@ import hellocucumber.memorydao.LoanDAOMemory;
 import hellocucumber.service.EmailProviderStub;
 import hellocucumber.service.LoanService;
 import hellocucumber.service.NotificationService;
+import hellocucumber.support.LibraryWorld;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -27,33 +28,19 @@ public class delayNotificationStepDefinitions {
     private NotificationService notificationService;
     private LoanService loanService;
     private Borrower georgeRed;
-    private LoanDAO loanDao;
-    private ItemDAO itemDao;
-    private BorrowerDAO borrowerDao;
     private Item hPotterItem;
+    private final LibraryWorld world;
+    public delayNotificationStepDefinitions(LibraryWorld world){
+        this.world=world;
+    }
     @Before
     public void setUp(){
-        itemDao = new ItemDAOMemory();
-        loanDao = new LoanDAOMemory();
-        borrowerDao = new BorrowerDAOMemory();
         loanService = new LoanService();
         notificationService= new NotificationService();
         emailProvider= new EmailProviderStub();
-        clearData();
-    }
-    public void clearData(){
-        List<Item> allItems = itemDao.findAll();
-        for(Item item : allItems) {
-            itemDao.delete(item);
-        }
-        List<Loan> allLoans = loanDao.findAll();
-        for(Loan loan : allLoans) {
-            loanDao.delete(loan);
-        }
-        List<Borrower> allBorrowers = borrowerDao.findAll();
-        for(Borrower borrower : allBorrowers) {
-            borrowerDao.delete(borrower);
-        }
+        world.clearBorrowers();
+        world.clearLoans();
+        world.clearItems();
     }
     @Given("{borrower} has borrowed the item Harry Potter")
     public void givenBorrowerHasBorrowedTheItem(Borrower borrower) {
@@ -61,7 +48,7 @@ public class delayNotificationStepDefinitions {
         georgeRed.setCategory(new BorrowerCategory());
         georgeRed.getCategory().setMaxLendingDays(2);//setting a dummy number for the scenario to pass
         georgeRed.getCategory().setMaxLendingItems(10);
-        borrowerDao.save(georgeRed);
+        world.borrowerDao.save(georgeRed);
 
         //Create and save the item/book Harry Potter
         Book hPotterBook = new Book();
@@ -71,13 +58,13 @@ public class delayNotificationStepDefinitions {
         hPotterBook.addItem(hPotterItem);
         hPotterItem.available();
         hPotterItem.setItemNumber(1001112);
-        itemDao.save(hPotterItem);
+        world.itemDao.save(hPotterItem);
     }
     @Given("Harry Potter's due date has passed")
     public void givenItemDueDatePassed() {
         if(loanService.findBorrower(georgeRed.getBorrowerNo())){
             loanService.borrow(hPotterItem.getItemNumber());
-            loanDao.findPending(hPotterItem.getItemNumber()).setLoanDate(LocalDate.now().minusDays(10));
+            world.loanDao.findPending(hPotterItem.getItemNumber()).setLoanDate(LocalDate.now().minusDays(10));
         }
     }
 

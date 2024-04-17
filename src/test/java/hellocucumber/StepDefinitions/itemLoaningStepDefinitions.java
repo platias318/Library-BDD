@@ -6,6 +6,7 @@ import hellocucumber.memorydao.BorrowerDAOMemory;
 import hellocucumber.memorydao.ItemDAOMemory;
 import hellocucumber.memorydao.LoanDAOMemory;
 import hellocucumber.service.LoanService;
+import hellocucumber.support.LibraryWorld;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -21,35 +22,20 @@ public class itemLoaningStepDefinitions {
     private LocalDate dueDate1; //Due date for the book Harry Potter
     private LocalDate dueDate2; //Due date for the book Moby Dick
     private Borrower georgeRed;
-    private LoanDAO loanDao;
-    private ItemDAO itemDao;
-    private BorrowerDAO borrowerDao;
     private Book hPotterBook;
     private Book mDickBook;
     private Item hPotterItem;
     private Item mDickItem;
-
+    private final LibraryWorld world;
+    public itemLoaningStepDefinitions(LibraryWorld world){
+        this.world=world;
+    }
     @Before
     public void setUp(){
-        itemDao = new ItemDAOMemory();
-        loanDao = new LoanDAOMemory();
-        borrowerDao = new BorrowerDAOMemory();
         loanService = new LoanService();
-        clearData();
-    }
-    public void clearData(){
-        List<Item> allItems = itemDao.findAll();
-        for(Item item : allItems) {
-            itemDao.delete(item);
-        }
-        List<Loan> allLoans = loanDao.findAll();
-        for(Loan loan : allLoans) {
-            loanDao.delete(loan);
-        }
-        List<Borrower> allBorrowers = borrowerDao.findAll();
-        for(Borrower borrower : allBorrowers) {
-            borrowerDao.delete(borrower);
-        }
+        world.clearItems();
+        world.clearLoans();
+        world.clearBorrowers();
     }
     @Given("the library has the item Harry Potter available")
     public void givenItemHarryPotterAvailable() {
@@ -61,12 +47,12 @@ public class itemLoaningStepDefinitions {
         hPotterBook.addItem(hPotterItem);
         hPotterItem.available();
         hPotterItem.setItemNumber(1001112);
-        itemDao.save(hPotterItem);
+        world.itemDao.save(hPotterItem);
     }
     @Given("{borrower} is a registered borrower")
     public void givenBorrowerRegistered(Borrower borrower) {
         georgeRed = borrower;
-        borrowerDao.save(georgeRed);
+        world.borrowerDao.save(georgeRed);
     }
     @Given("George Red has {int} pending items to be returned")
     public void givenPendingItemsToBeReturned(Integer pendingItems) {
@@ -92,7 +78,7 @@ public class itemLoaningStepDefinitions {
     }
     @Then("the system successfully loans the item Harry Potter to George Red with a due date set")
     public void thenSystemLoansItemHarryPotterToGeorgeRed() {
-        Assertions.assertEquals(georgeRed,loanDao.findPending(hPotterItem.getItemNumber()).getBorrower());
+        Assertions.assertEquals(georgeRed,world.loanDao.findPending(hPotterItem.getItemNumber()).getBorrower());
         Assertions.assertNotNull(dueDate1);
     }
     @Then("George Red's pending items increase to {int}")
@@ -109,7 +95,7 @@ public class itemLoaningStepDefinitions {
         hPotterBook.addItem(hPotterItem);
         hPotterItem.available();
         hPotterItem.setItemNumber(1001112);
-        itemDao.save(hPotterItem);
+        world.itemDao.save(hPotterItem);
         // Create and save the book and the item Moby Dick
         mDickBook = new Book();
         mDickBook.setTitle("Moby Dick");
@@ -118,7 +104,7 @@ public class itemLoaningStepDefinitions {
         mDickBook.addItem(mDickItem);
         mDickItem.available();
         mDickItem.setItemNumber(1001233);
-        itemDao.save(mDickItem);
+        world.itemDao.save(mDickItem);
     }
 
     @When("George Red tries to borrow both items")
@@ -168,7 +154,7 @@ public class itemLoaningStepDefinitions {
 
     @Then("the system doesn't allow the loan")
     public void thenSystemDoesNotAllowLoan() {
-        Assertions.assertNull(loanDao.findPending(hPotterItem.getItemNumber()));
+        Assertions.assertNull(world.loanDao.findPending(hPotterItem.getItemNumber()));
     }
     @Then("George Red's pending items remain {int}")
     public void thenBorrowerPendingItemsRemain(Integer pendingItems) {
