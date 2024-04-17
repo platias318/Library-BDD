@@ -25,8 +25,6 @@ import java.util.List;
 public class itemReturnStepDefinitions {
     // Instance variables
     private Money fine;
-    private LoanService loanService;
-    private ReturnService returnService;
     private Borrower georgeRed;
     private Item kingdomItem;
     private final LibraryWorld world;
@@ -35,25 +33,9 @@ public class itemReturnStepDefinitions {
     }
     @Before
     public void setUp(){
-        loanService = new LoanService();
-        returnService = new ReturnService();
         world.clearBorrowers();
         world.clearItems();
         world.clearLoans();
-    }
-    public void clearData() {
-        List<Item> allItems = world.itemDao.findAll();
-        for (Item item : allItems) {
-            world.itemDao.delete(item);
-        }
-        List<Loan> allLoans = world.loanDao.findAll();
-        for (Loan loan : allLoans) {
-            world.loanDao.delete(loan);
-        }
-        List<Borrower> allBorrowers = world.borrowerDao.findAll();
-        for(Borrower borrower : allBorrowers) {
-            world.borrowerDao.delete(borrower);
-        }
     }
     @Given("{borrower} borrowed the item Animal Kingdom {int} days prior to today's date")
     public void givenBorrowerBorrowedItemWithReturnDate(Borrower borrower,Integer daysBefore) {
@@ -61,19 +43,11 @@ public class itemReturnStepDefinitions {
         georgeRed.setCategory(new BorrowerCategory());
         georgeRed.getCategory().setMaxLendingItems(5);
         georgeRed.getCategory().setDailyFine(new Money(new BigDecimal(Integer.toString(5)),Currency.getInstance("EUR")));
-        world.borrowerDao.save(georgeRed);
 
         // Create and save the item/book Animal Kingdom
-        Book kingdomBook = new Book();
-        kingdomBook.setTitle("Animal Kingdom");
-        kingdomItem = new Item();
-        kingdomItem.setBook(kingdomBook);
-        kingdomBook.addItem(kingdomItem);
-        kingdomItem.available();
-        kingdomItem.setItemNumber(1001114);
-        world.itemDao.save(kingdomItem);
-        if(loanService.findBorrower(georgeRed.getBorrowerNo())){
-            LocalDate date = loanService.borrow(kingdomItem.getItemNumber());
+        kingdomItem=world.createItem("Animal Kingdom",1001114 );
+        if(world.loanService.findBorrower(georgeRed.getBorrowerNo())){
+            world.loanService.borrow(kingdomItem.getItemNumber());
             //changing to a custom loan date than the one created, for the scenario to be right
             world.loanDao.findPending(kingdomItem.getItemNumber()).setLoanDate(LocalDate.now().minusDays(daysBefore));
         }
@@ -85,7 +59,7 @@ public class itemReturnStepDefinitions {
     }
     @When("the return of Animal Kingdom is processed")
     public void whenItemReturnIsProcessed() {
-        fine = returnService.returnItem(kingdomItem.getItemNumber());
+        fine = world.returnService.returnItem(kingdomItem.getItemNumber());
     }
     @Then("the system marks the state of Animal Kingdom as AVAILABLE")
     public void thenNewStateMarked() {

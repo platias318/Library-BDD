@@ -1,9 +1,7 @@
 package hellocucumber.StepDefinitions;
 
-import hellocucumber.contacts.Address;
 import hellocucumber.contacts.EmailAddress;
 import hellocucumber.contacts.TelephoneNumber;
-import hellocucumber.contacts.ZipCode;
 import hellocucumber.domain.Borrower;
 import hellocucumber.domain.BorrowerCategory;
 import hellocucumber.domain.Loan;
@@ -31,7 +29,7 @@ public class borrowerHandlingStepDefinitions {
 
     @Given("{borrower} is not registered as a borrower")
     public void givenBorrowerNotRegistered(Borrower borrower) {
-        georgeRed =borrower;
+        georgeRed=borrower;
         world.borrowerDao.delete(world.borrowerDao.find(georgeRed.getFirstName(), georgeRed.getLastName()));
     }
     @When("George Red gets registered in the system with a unique borrower number and his details")
@@ -39,12 +37,7 @@ public class borrowerHandlingStepDefinitions {
         //Create and save the borrower with dummy details
         georgeRed.setBorrowerNo(101);
         georgeRed.setCategory(new BorrowerCategory());
-        Address address = new Address();
-        address.setCity("Athens");
-        address.setNumber("5");
-        address.setZipCode(new ZipCode("111"));
-        address.setStreet("Patisiwn");
-        georgeRed.setAddress(new Address(address));
+        georgeRed.setAddress(world.createAddress("Athens","Patisiwn","5","111"));
         georgeRed.setEmail(new EmailAddress("georgeRed@gmail.com"));
         georgeRed.setTelephone(new TelephoneNumber("6987654321"));
         answer = world.borrowerDao.save(georgeRed);
@@ -62,19 +55,13 @@ public class borrowerHandlingStepDefinitions {
     @Given("{borrower} is registered as a borrower")
     public void givenBorrowerRegistered(Borrower borrower) {
         georgeRed =borrower;
-        world.borrowerDao.save(georgeRed);
     }
     @When("the system attempts to register George Red with a unique borrower number and his details")
     public void whenSystemAttemptsRegisterGeorgeRed() {
         //Create, and attempt to save the borrower
         georgeRed.setBorrowerNo(101);
         georgeRed.setCategory(new BorrowerCategory());
-        Address address = new Address();
-        address.setCity("Athens");
-        address.setNumber("5");
-        address.setZipCode(new ZipCode("111"));
-        address.setStreet("Patisiwn");
-        georgeRed.setAddress(new Address(address));
+        georgeRed.setAddress(world.createAddress("Athens","Patisiwn","5","111"));
         georgeRed.setEmail(new EmailAddress("georgeRed@gmail.com"));
         georgeRed.setTelephone(new TelephoneNumber("6987654321"));
         //This variable is true if the process was completed and false if it wasn't

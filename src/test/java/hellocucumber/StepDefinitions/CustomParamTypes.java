@@ -1,21 +1,27 @@
 package hellocucumber.StepDefinitions;
 
-import hellocucumber.domain.Book;
 import hellocucumber.domain.Borrower;
-import hellocucumber.domain.Item;
+import hellocucumber.support.LibraryWorld;
 import hellocucumber.util.SimpleCalendar;
 import io.cucumber.java.ParameterType;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CustomParamTypes {
+    private final LibraryWorld world;
+    public CustomParamTypes(LibraryWorld world){
+        this.world=world;
+    }
     @ParameterType("George Red") //custom parameter type for creating a borrower
     public Borrower borrower(String fullName) {  // type, name (from method)
         String[] names = fullName.split(" ");
+        if(world.borrowerDao.find(names[0],names[1])!=null){
+            return world.borrowerDao.find(names[0],names[1]);
+        }
         Borrower borrower = new Borrower();
         borrower.setFirstName(names[0]);
         borrower.setLastName(names[1]);
+        world.borrowerDao.save(borrower);
         return borrower;
     }
     @ParameterType("\\d{4}-\\d{2}-\\d{2}")

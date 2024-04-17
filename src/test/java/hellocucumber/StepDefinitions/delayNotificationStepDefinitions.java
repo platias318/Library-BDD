@@ -24,9 +24,6 @@ import java.util.List;
 
 public class delayNotificationStepDefinitions {
     // Instance variables
-    private EmailProviderStub emailProvider;
-    private NotificationService notificationService;
-    private LoanService loanService;
     private Borrower georgeRed;
     private Item hPotterItem;
     private final LibraryWorld world;
@@ -35,9 +32,6 @@ public class delayNotificationStepDefinitions {
     }
     @Before
     public void setUp(){
-        loanService = new LoanService();
-        notificationService= new NotificationService();
-        emailProvider= new EmailProviderStub();
         world.clearBorrowers();
         world.clearLoans();
         world.clearItems();
@@ -48,22 +42,13 @@ public class delayNotificationStepDefinitions {
         georgeRed.setCategory(new BorrowerCategory());
         georgeRed.getCategory().setMaxLendingDays(2);//setting a dummy number for the scenario to pass
         georgeRed.getCategory().setMaxLendingItems(10);
-        world.borrowerDao.save(georgeRed);
-
         //Create and save the item/book Harry Potter
-        Book hPotterBook = new Book();
-        hPotterBook.setTitle("Harry Potter");
-        hPotterItem = new Item();
-        hPotterItem.setBook(hPotterBook);
-        hPotterBook.addItem(hPotterItem);
-        hPotterItem.available();
-        hPotterItem.setItemNumber(1001112);
-        world.itemDao.save(hPotterItem);
+        hPotterItem=world.createItem("Harry Potter", 1001112);
     }
     @Given("Harry Potter's due date has passed")
     public void givenItemDueDatePassed() {
-        if(loanService.findBorrower(georgeRed.getBorrowerNo())){
-            loanService.borrow(hPotterItem.getItemNumber());
+        if(world.loanService.findBorrower(georgeRed.getBorrowerNo())){
+            world.loanService.borrow(hPotterItem.getItemNumber());
             world.loanDao.findPending(hPotterItem.getItemNumber()).setLoanDate(LocalDate.now().minusDays(10));
         }
     }
@@ -75,13 +60,13 @@ public class delayNotificationStepDefinitions {
     }
     @When("the system executes the delayed return notification process")
     public void theSystemExecutesTheDelayedReturnNotificationProcess() {
-        notificationService.setProvider(emailProvider);
-        notificationService.notifyBorrowers();
+        world.notificationService.setProvider(world.emailProvider);
+        world.notificationService.notifyBorrowers();
     }
     @Then("George Red receives an email notification for the return of the item")
     public void georgeRedReceivesAnEmailNotificationForTheReturnOfTheItem() {
         boolean answer = false;
-        for(EmailMessage message:emailProvider.getAllEmails()){
+        for(EmailMessage message:world.emailProvider.getAllEmails()){
             if(message.getTo().equals(georgeRed.getEmail())){
                 answer= true;
             }
@@ -98,7 +83,7 @@ public class delayNotificationStepDefinitions {
     @Then("George Red does not receive an email notification for the return of the item")
     public void georgeRedDoesNotReceiveAnEmailNotificationForTheReturnOfTheItem() {
         boolean answer= true;
-        for(EmailMessage message:emailProvider.getAllEmails()){
+        for(EmailMessage message:world.emailProvider.getAllEmails()){
             if(message.getTo().equals(georgeRed.getEmail())){
                 answer= false;
             }

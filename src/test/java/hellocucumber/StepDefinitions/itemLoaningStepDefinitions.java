@@ -18,12 +18,9 @@ import java.util.List;
 
 public class itemLoaningStepDefinitions {
     // Instance variables
-    private LoanService loanService;
     private LocalDate dueDate1; //Due date for the book Harry Potter
     private LocalDate dueDate2; //Due date for the book Moby Dick
     private Borrower georgeRed;
-    private Book hPotterBook;
-    private Book mDickBook;
     private Item hPotterItem;
     private Item mDickItem;
     private final LibraryWorld world;
@@ -32,7 +29,6 @@ public class itemLoaningStepDefinitions {
     }
     @Before
     public void setUp(){
-        loanService = new LoanService();
         world.clearItems();
         world.clearLoans();
         world.clearBorrowers();
@@ -40,19 +36,11 @@ public class itemLoaningStepDefinitions {
     @Given("the library has the item Harry Potter available")
     public void givenItemHarryPotterAvailable() {
         // Create and save the item/book Harry Potter
-        hPotterBook = new Book();
-        hPotterBook.setTitle("Harry Potter");
-        hPotterItem = new Item();
-        hPotterItem.setBook(hPotterBook);
-        hPotterBook.addItem(hPotterItem);
-        hPotterItem.available();
-        hPotterItem.setItemNumber(1001112);
-        world.itemDao.save(hPotterItem);
+        hPotterItem=world.createItem("Harry Potter", 1001112);
     }
     @Given("{borrower} is a registered borrower")
     public void givenBorrowerRegistered(Borrower borrower) {
         georgeRed = borrower;
-        world.borrowerDao.save(georgeRed);
     }
     @Given("George Red has {int} pending items to be returned")
     public void givenPendingItemsToBeReturned(Integer pendingItems) {
@@ -72,8 +60,8 @@ public class itemLoaningStepDefinitions {
     @When("George Red borrows the item Harry Potter")
     public void  whenBorrowerBorrowsItemHarryPotter() {
         // Attempt to borrow the item and get due date if successful
-        if(loanService.findBorrower(georgeRed.getBorrowerNo())){
-            dueDate1 = loanService.borrow(hPotterItem.getItemNumber());
+        if(world.loanService.findBorrower(georgeRed.getBorrowerNo())){
+            dueDate1 = world.loanService.borrow(hPotterItem.getItemNumber());
         }
     }
     @Then("the system successfully loans the item Harry Potter to George Red with a due date set")
@@ -88,32 +76,18 @@ public class itemLoaningStepDefinitions {
     @Given("the library has the items Harry Potter and Moby Dick available")
     public void givenItemsHarryPotterAndMobyDickAvailable() {
         // Create and save the book and the item Harry Potter
-        hPotterBook = new Book();
-        hPotterBook.setTitle("Harry Potter");
-        hPotterItem = new Item();
-        hPotterItem.setBook(hPotterBook);
-        hPotterBook.addItem(hPotterItem);
-        hPotterItem.available();
-        hPotterItem.setItemNumber(1001112);
-        world.itemDao.save(hPotterItem);
+        hPotterItem=world.createItem("Harry Potter", 1001112);
         // Create and save the book and the item Moby Dick
-        mDickBook = new Book();
-        mDickBook.setTitle("Moby Dick");
-        mDickItem = new Item();
-        mDickItem.setBook(mDickBook);
-        mDickBook.addItem(mDickItem);
-        mDickItem.available();
-        mDickItem.setItemNumber(1001233);
-        world.itemDao.save(mDickItem);
+        mDickItem = world.createItem("Moby Dick",1001233);
     }
 
     @When("George Red tries to borrow both items")
     public void whenBorrowerTriesToBorrowBothItems() {
-        if(loanService.findBorrower(georgeRed.getBorrowerNo())){
-            dueDate1 = loanService.borrow(hPotterItem.getItemNumber());
+        if(world.loanService.findBorrower(georgeRed.getBorrowerNo())){
+            dueDate1 = world.loanService.borrow(hPotterItem.getItemNumber());
         }
-        if(loanService.findBorrower(georgeRed.getBorrowerNo())){
-            dueDate2 = loanService.borrow(mDickItem.getItemNumber());
+        if(world.loanService.findBorrower(georgeRed.getBorrowerNo())){
+            dueDate2 = world.loanService.borrow(mDickItem.getItemNumber());
         }
     }
 
@@ -126,20 +100,14 @@ public class itemLoaningStepDefinitions {
     @Given("the item Harry Potter is in the library but not in the system")
     public void givenItemHarryPotterInLibraryNotInSystem() {
         // Create Harry Potter item and mark it as withdrawn
-        hPotterBook = new Book();
-        hPotterBook.setTitle("Harry Potter");
-        hPotterItem = new Item();
-        hPotterItem.setBook(hPotterBook);
-        hPotterBook.addItem(hPotterItem);
-        hPotterItem.setItemNumber(1001112);
-        hPotterItem.available();//the book must be available before being withdrawn
+        hPotterItem=world.createItem("Harry Potter", 1001112);
         hPotterItem.withdraw();
     }
 
     @When("George Red tries to borrow the item Harry Potter")
     public void whenBorrowerTriesToBorrowItemHarryPotter() {
-        if(loanService.findBorrower(georgeRed.getBorrowerNo())){
-            dueDate1 = loanService.borrow(hPotterItem.getItemNumber());
+        if(world.loanService.findBorrower(georgeRed.getBorrowerNo())){
+            dueDate1 = world.loanService.borrow(hPotterItem.getItemNumber());
         }
     }
     @Then("the system returns an error due to the item's status")
