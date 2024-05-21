@@ -120,7 +120,7 @@ public class Book {
      * Επιστρέφει τον εκδότη ({@link Publisher})του βιβλίου.
      * @return Ο Εκδοτικός οίκος του βιβλίου
      */
-    public Publisher getPublisher() {
+        public Publisher getPublisher() {
         return publisher;
     }
 
