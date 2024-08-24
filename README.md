@@ -1,5 +1,7 @@
 This repository explores the integration of large language models (LLMs) within the framework of Behavior-Driven Development (BDD). Large language models, such as GPT-3.5, GPT-4, GPT-4o, and GitHub Copilot, are advanced artificial intelligence tools capable of understanding and generating human-like text. These models significantly impact code automation and enhance the overall quality of software development.
 
+In this thesis we make use of a simple library system application in Java, created by my supervising teacher, Mr. Diamantidis, and can be found on the [following link](https://github.com/diamantidakos/Library)
+
 Behavior-Driven Development (BDD) is a methodology that emphasizes collaboration between developers and stakeholders to define and manage system requirements through natural language scenarios. Cucumber is a key tool for BDD, facilitating the writing and automation of test scenarios in natural language, which are then converted into executable tests.
 
 The primary objective of this project is to assess the effectiveness of LLMs in generating BDD-related code, focusing specifically on the creation of Step Definitions and the understanding of variables. The study evaluates various models and methodologies to determine their efficiency and influence on the BDD process. 
