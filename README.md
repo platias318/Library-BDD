@@ -11,3 +11,6 @@ The research methodology involves four phases of experimentation, each applying 
 The findings indicate that GPT-4o stands out in producing Step Definitions and comprehending requirements, while GitHub Copilot also performs well, albeit to a lesser degree. Effective strategies include presenting requirements from the start and generating code for Domain/Data Access Objects/Services. Additionally, providing detailed class information has been shown to improve the quality of results.
 
 Overall, this project demonstrates the potential of LLMs to enhance BDD practices and provides valuable insights for future research. This project is part of my Bachelor Thesis for completing my studies at AUEB, contributing to the advancement of AI-driven software development methodologies.
+
+[link of the final pdf thesis](https://github.com/platias318/Utilization-of-Large-Language-Models-for-the-Development-of-Automated-Software-Acceptance-Testing/blob/main/src/site/chats/Bachelors'%20thesis.pdf)
+In the provided link above, there are also links with every chat I created with the AI systems
