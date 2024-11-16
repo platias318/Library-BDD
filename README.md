@@ -12,5 +12,6 @@ The findings indicate that GPT-4o stands out in producing Step Definitions and c
 
 Overall, this project demonstrates the potential of LLMs to enhance BDD practices and provides valuable insights for future research. This project is part of my Bachelor Thesis for completing my studies at AUEB, contributing to the advancement of AI-driven software development methodologies.
 
-[link of the final pdf thesis](https://github.com/platias318/Utilization-of-Large-Language-Models-for-the-Development-of-Automated-Software-Acceptance-Testing/blob/main/src/site/chats/Bachelors'%20thesis.pdf)
+[Link of the final pdf thesis in Greek](https://github.com/platias318/Utilization-of-Large-Language-Models-for-the-Development-of-Automated-Software-Acceptance-Testing/blob/main/src/site/chats/Bachelors'%20thesis.pdf)
+[Link of the final pdf thesis in English](https://github.com/platias318/Utilization-of-Large-Language-Models-for-the-Development-of-Automated-Software-Acceptance-Testing/blob/main/src/site/chats/Bachelors'%20thesis%20English%20translated.pdf)
 In the provided link above, there are also links with every chat I created with the AI systems
